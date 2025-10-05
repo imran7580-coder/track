@@ -1,0 +1,23 @@
+<?php
+// track.php — basic postback receiver for lead tracking
+
+// Get incoming parameters from affiliate network
+$click_id = isset($_GET['click_id']) ? $_GET['click_id'] : null;
+$payout = isset($_GET['payout']) ? $_GET['payout'] : 0;
+$status = isset($_GET['status']) ? $_GET['status'] : 'pending';
+
+// Create a log file (optional, for debugging)
+$logFile = 'leads_log.txt';
+$logData = date('Y-m-d H:i:s') . " | ClickID: $click_id | Payout: $payout | Status: $status\n";
+file_put_contents($logFile, $logData, FILE_APPEND);
+
+// Send simple response
+header('Content-Type: application/json');
+echo json_encode([
+    'success' => true,
+    'message' => 'Lead tracked successfully',
+    'click_id' => $click_id,
+    'payout' => $payout,
+    'status' => $status
+]);
+?>
